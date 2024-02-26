@@ -126,13 +126,7 @@ class NeptuneQueryExecutor(QueryExecutor):
         # TODO: Replace with proper datatype handling
         query.parameters['earliest_allowed_time'] = str(query.parameters['earliest_allowed_time'])
 
-        requests = (
-            self.query(query_stmt, parameters)
-            for parameters
-            in [query.parameters]
-        )
-
-        result = await asyncio.gather(*requests)
+        result = await asyncio.gather(self.query(query_stmt, query.parameters))
 
         if log_result:
             for record in result.records:
